@@ -1,0 +1,11 @@
+enabled: false
+mode: blacklist
+mmdb_path: 'private://yu_ipas/GeoLite2-City.mmdb'
+db_source: maxmind
+custom_db_url: ''
+maxmind_key: ''
+log_passed: false
+log_retention_days: 30
+bot_rdns_verify: true
+admins_safe: true
+rescue_token: ''

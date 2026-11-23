@@ -1,0 +1,131 @@
+yu_ipas.stats:
+  path: '/admin/ipas'
+  defaults:
+    _controller: '\Drupal\yu_ipas\Controller\StatsController::build'
+    _title: 'IP Anti Spam'
+  requirements:
+    _permission: 'administer yu_ipas'
+  options:
+    _admin_route: TRUE
+
+yu_ipas.rules:
+  path: '/admin/ipas/rules'
+  defaults:
+    _controller: '\Drupal\yu_ipas\Controller\RulesListController::build'
+    _title: 'Rules'
+  requirements:
+    _permission: 'administer yu_ipas'
+  options:
+    _admin_route: TRUE
+
+yu_ipas.rule_add:
+  path: '/admin/ipas/rules/add'
+  defaults:
+    _form: '\Drupal\yu_ipas\Form\RuleForm'
+    _title: 'Add rule'
+  requirements:
+    _permission: 'administer yu_ipas'
+  options:
+    _admin_route: TRUE
+
+yu_ipas.rule_edit:
+  path: '/admin/ipas/rules/{rid}/edit'
+  defaults:
+    _form: '\Drupal\yu_ipas\Form\RuleForm'
+    _title: 'Edit rule'
+  requirements:
+    _permission: 'administer yu_ipas'
+  options:
+    _admin_route: TRUE
+
+yu_ipas.rule_toggle:
+  path: '/admin/ipas/rules/{rid}/toggle'
+  defaults:
+    _controller: '\Drupal\yu_ipas\Controller\RulesListController::toggleRule'
+  requirements:
+    _permission: 'administer yu_ipas'
+    _csrf_token: 'TRUE'
+  options:
+    _admin_route: TRUE
+
+yu_ipas.rule_delete:
+  path: '/admin/ipas/rules/{rid}/delete'
+  defaults:
+    _form: '\Drupal\yu_ipas\Form\RuleDeleteForm'
+    _title: 'Delete rule'
+  requirements:
+    _permission: 'administer yu_ipas'
+  options:
+    _admin_route: TRUE
+
+yu_ipas.rule_import:
+  path: '/admin/ipas/rules/import'
+  defaults:
+    _form: '\Drupal\yu_ipas\Form\RuleImportForm'
+    _title: 'Bulk import'
+  requirements:
+    _permission: 'administer yu_ipas'
+  options:
+    _admin_route: TRUE
+
+yu_ipas.exceptions:
+  path: '/admin/ipas/exceptions'
+  defaults:
+    _controller: '\Drupal\yu_ipas\Controller\ExceptionsController::build'
+    _title: 'Exceptions'
+  requirements:
+    _permission: 'administer yu_ipas'
+  options:
+    _admin_route: TRUE
+
+yu_ipas.exception_add:
+  path: '/admin/ipas/exceptions/add'
+  defaults:
+    _form: '\Drupal\yu_ipas\Form\ExceptionForm'
+    _title: 'Add exception'
+  requirements:
+    _permission: 'administer yu_ipas'
+  options:
+    _admin_route: TRUE
+
+yu_ipas.exception_edit:
+  path: '/admin/ipas/exceptions/{eid}/edit'
+  defaults:
+    _form: '\Drupal\yu_ipas\Form\ExceptionForm'
+    _title: 'Edit exception'
+  requirements:
+    _permission: 'administer yu_ipas'
+  options:
+    _admin_route: TRUE
+
+yu_ipas.exception_delete:
+  path: '/admin/ipas/exceptions/{eid}/delete'
+  defaults:
+    _form: '\Drupal\yu_ipas\Form\ExceptionDeleteForm'
+    _title: 'Delete exception'
+  requirements:
+    _permission: 'administer yu_ipas'
+  options:
+    _admin_route: TRUE
+
+yu_ipas.settings:
+  path: '/admin/ipas/settings'
+  defaults:
+    _form: '\Drupal\yu_ipas\Form\SettingsForm'
+    _title: 'Settings'
+  requirements:
+    _permission: 'administer yu_ipas'
+  options:
+    _admin_route: TRUE
+
+# Emergency rescue endpoint: never blocked by the middleware, allows to
+# regain access after an accidental self-lockout.
+yu_ipas.rescue:
+  path: '/yu-ipas/rescue/{token}'
+  defaults:
+    _form: '\Drupal\yu_ipas\Form\RescueForm'
+    _title: 'IP Anti Spam — emergency unblock'
+  requirements:
+    _access: 'TRUE'
+  options:
+    no_cache: TRUE

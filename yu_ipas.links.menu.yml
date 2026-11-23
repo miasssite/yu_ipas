@@ -1,0 +1,25 @@
+# Top-level admin entry point: Admin -> "IP Anti Spam" (/admin/ipas).
+yu_ipas.stats:
+  title: 'IP Anti Spam'
+  description: 'Blocking by IP, countries and Russian regions. Rules, exceptions and statistics.'
+  route_name: yu_ipas.stats
+  parent: system.admin
+  weight: -15
+
+yu_ipas.rules:
+  title: 'Rules'
+  description: 'Block/allow rules grouped by countries and Russian regions.'
+  route_name: yu_ipas.rules
+  parent: yu_ipas.stats
+
+yu_ipas.exceptions:
+  title: 'Exceptions'
+  description: 'Trusted IPs, CIDR ranges and bot User-Agents.'
+  route_name: yu_ipas.exceptions
+  parent: yu_ipas.stats
+
+yu_ipas.settings:
+  title: 'Settings'
+  description: 'Module settings: mode, GeoIP database, logging.'
+  route_name: yu_ipas.settings
+  parent: yu_ipas.stats

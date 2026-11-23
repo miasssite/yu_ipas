@@ -1,0 +1,5 @@
+yu_ipas.admin:
+  version: 1.0
+  css:
+    theme:
+      css/yu-ipas-admin.css: {}

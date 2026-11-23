@@ -1,0 +1,568 @@
+# Russian translation of IP Anti Spam (yu_ipas).
+# Copyright (C) 2026 yu_ipas
+msgid ""
+msgstr ""
+"Project-Id-Version: yu_ipas 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2026-11-20 12:00+0500\n"
+"Last-Translator: \n"
+"Language-Team: Russian\n"
+"Language: ru\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : 2);\n"
+
+# --- Module info ---
+
+msgid "IP Anti Spam"
+msgstr "IP Anti Spam (защита от спама)"
+
+msgid "Blocks access to the site by IP, country and Russian regions. Includes bot exceptions (Yandex, Google), rule management and visit/block statistics."
+msgstr "Блокирует доступ к сайту по IP, странам и областям России. Включает исключения для ботов (Яндекс, Google), управление правилами и статистику переходов и блокировок."
+
+msgid "Custom"
+msgstr "Кастомные"
+
+# --- Help (yu_ipas.module) ---
+
+msgid "IP Anti Spam blocks access to the site by IP address, country and Russian regions (GeoLite2-City database). Trusted bots (Yandex, Google) can be excluded via reverse DNS verification. All pages live under <a href=\":url\">IP Anti Spam</a>."
+msgstr "IP Anti Spam блокирует доступ к сайту по IP-адресу, стране и областям России (база GeoLite2-City). Доверенные боты (Яндекс, Google) могут быть исключены через проверку по обратному DNS. Все страницы модуля находятся в разделе <a href=\":url\">IP Anti Spam</a>."
+
+# --- Permissions ---
+
+msgid "Administer IP Anti Spam"
+msgstr "Управление IP Anti Spam"
+
+msgid "Configure blocking rules, exceptions and view statistics."
+msgstr "Настройка правил блокировки, исключений и просмотр статистики."
+
+msgid "Bypass IP Anti Spam blocking"
+msgstr "Обход блокировки IP Anti Spam"
+
+msgid "Never blocked by IP Anti Spam rules, regardless of IP."
+msgstr "Никогда не блокируется правилами IP Anti Spam, независимо от IP."
+
+# --- Menu and tabs (links.menu.yml, links.task.yml) ---
+
+msgid "Blocking by IP, countries and Russian regions. Rules, exceptions and statistics."
+msgstr "Блокировка по IP, странам и областям России. Правила, исключения и статистика."
+
+msgid "Rules"
+msgstr "Правила"
+
+msgid "Block/allow rules grouped by countries and Russian regions."
+msgstr "Правила блокировки/разрешения, сгруппированные по странам и областям России."
+
+msgid "Exceptions"
+msgstr "Исключения"
+
+msgid "Trusted IPs, CIDR ranges and bot User-Agents."
+msgstr "Доверенные IP, CIDR-диапазоны и User-Agent ботов."
+
+msgid "Settings"
+msgstr "Настройки"
+
+msgid "Module settings: mode, GeoIP database, logging."
+msgstr "Настройки модуля: режим, база GeoIP, ведение лога."
+
+msgid "Statistics"
+msgstr "Статистика"
+
+msgid "Add rule"
+msgstr "Добавить правило"
+
+msgid "Bulk import"
+msgstr "Массовый импорт"
+
+msgid "Add exception"
+msgstr "Добавить исключение"
+
+# --- SettingsForm ---
+
+msgid "GeoLite2-City database is available at @path."
+msgstr "База GeoLite2-City доступна: @path."
+
+msgid "GeoLite2-City database not found or the maxmind-db/reader library is missing. Run <code>drush yu-ipas:download-db</code> or press \"Download database now\" below. Until then only manual IP/CIDR rules will work; country/region rules cannot be evaluated."
+msgstr "База GeoLite2-City не найдена или отсутствует библиотека maxmind-db/reader. Выполните <code>drush yu-ipas:download-db</code> или нажмите «Скачать базу сейчас» ниже. Пока будут работать только ручные правила IP/CIDR; правила по странам и областям применяться не могут."
+
+msgid "Enable blocking"
+msgstr "Включить блокировку"
+
+msgid "When disabled the module only collects statistics and never blocks requests."
+msgstr "Когда выключено, модуль только собирает статистику и никогда не блокирует запросы."
+
+msgid "Rule mode"
+msgstr "Режим правил"
+
+msgid "<strong>Blacklist:</strong> listed countries and Russian regions are blocked, everything else is allowed.<br><strong>Whitelist:</strong> only listed Russian regions / countries (and manual IPs) are allowed, everything else is blocked. Trusted bot exceptions apply in both modes."
+msgstr "<strong>Чёрный список:</strong> перечисленные страны и области России блокируются, всё остальное разрешено.<br><strong>Белый список:</strong> разрешены только перечисленные области России / страны (и ручные IP), всё остальное блокируется. Исключения для доверенных ботов действуют в обоих режимах."
+
+msgid "Blacklist — block the selected countries/regions"
+msgstr "Чёрный список — блокировать выбранные страны/области"
+
+msgid "Whitelist — allow only the selected Russian regions"
+msgstr "Белый список — разрешать только выбранные области России"
+
+msgid "GeoIP database (MaxMind GeoLite2-City)"
+msgstr "База GeoIP (MaxMind GeoLite2-City)"
+
+msgid "Path to GeoLite2-City.mmdb"
+msgstr "Путь к GeoLite2-City.mmdb"
+
+msgid "Stream wrapper path, e.g. private://yu_ipas/GeoLite2-City.mmdb."
+msgstr "Путь в формате stream wrapper, например private://yu_ipas/GeoLite2-City.mmdb."
+
+msgid "MaxMind license key"
+msgstr "Лицензионный ключ MaxMind"
+
+msgid "Free key from maxmind.com. Only needed for the official \"MaxMind\" source; mirrors work without registration. Prefer the MAXMIND_LICENSE_KEY environment variable on production."
+msgstr "Бесплатный ключ с maxmind.com. Нужен только для официального источника «MaxMind»; зеркала работают без регистрации. На продакшене предпочитайте переменную окружения MAXMIND_LICENSE_KEY."
+
+msgid "Logging and statistics"
+msgstr "Логирование и статистика"
+
+msgid "Log every passed visit"
+msgstr "Логировать каждый разрешённый визит"
+
+msgid "When disabled, only the first visit of each IP per day is logged. Enable only for small/low-traffic sites."
+msgstr "Когда выключено, в лог попадает только первый визит каждого IP за день. Включайте только для сайтов с небольшим трафиком."
+
+msgid "Log retention period (days)"
+msgstr "Срок хранения лога (дней)"
+
+msgid "Older records are removed on every cron run. 0 disables cleanup."
+msgstr "Записи старше указанного срока удаляются при каждом запуске cron. 0 — отключить очистку."
+
+msgid "Trusted bots"
+msgstr "Доверенные боты"
+
+msgid "Verify bots by reverse DNS"
+msgstr "Проверять ботов по обратному DNS"
+
+msgid "User-Agent exceptions marked as \"verify\" are only trusted when the client IP resolves through forward-confirmed reverse DNS to a known bot network (yandex.ru, googlebot.com, bing.com, etc.). Protects against User-Agent spoofing."
+msgstr "Исключения по User-Agent с пометкой «проверять» признаются доверенными только если IP клиента резолвится через forward-confirmed reverse DNS к известной сети ботов (yandex.ru, googlebot.com, bing.com и т.д.). Защита от подмены User-Agent."
+
+msgid "Use a stream wrapper path like private://yu_ipas/GeoLite2-City.mmdb."
+msgstr "Используйте путь в формате stream wrapper, например private://yu_ipas/GeoLite2-City.mmdb."
+
+msgid "Invalid mode."
+msgstr "Недопустимый режим."
+
+# --- RuleForm ---
+
+msgid "Rule type"
+msgstr "Тип правила"
+
+msgid "Single IP address"
+msgstr "Отдельный IP-адрес"
+
+msgid "CIDR range (e.g. 192.168.0.0/24)"
+msgstr "CIDR-диапазон (например, 192.168.0.0/24)"
+
+msgid "Whole country (ISO code)"
+msgstr "Целая страна (код ISO)"
+
+msgid "Russian region (ISO 3166-2:RU)"
+msgstr "Область России (ISO 3166-2:RU)"
+
+msgid "IP address / CIDR"
+msgstr "IP-адрес / CIDR"
+
+msgid "Country"
+msgstr "Страна"
+
+msgid "- Select country -"
+msgstr "- Выберите страну -"
+
+msgid "Russian region"
+msgstr "Область России"
+
+msgid "- Select region -"
+msgstr "- Выберите область -"
+
+msgid "Comment"
+msgstr "Комментарий"
+
+msgid "Optional human-readable note."
+msgstr "Необязательная заметка для человека."
+
+msgid "Enabled"
+msgstr "Включено"
+
+msgid "<em>Current mode: whitelist — this rule ALLOWS the selected value, everything not listed will be blocked.</em>"
+msgstr "<em>Текущий режим: белый список — это правило РАЗРЕШАЕТ выбранное значение, всё остальное будет заблокировано.</em>"
+
+msgid "<em>Current mode: blacklist — this rule BLOCKS the selected value.</em>"
+msgstr "<em>Текущий режим: чёрный список — это правило БЛОКИРУЕТ выбранное значение.</em>"
+
+msgid "Save rule"
+msgstr "Сохранить правило"
+
+msgid "Invalid IP address."
+msgstr "Некорректный IP-адрес."
+
+msgid "Invalid CIDR notation."
+msgstr "Некорректная запись CIDR."
+
+msgid "CIDR must include a prefix, e.g. 192.168.0.0/24."
+msgstr "CIDR должен содержать префикс, например 192.168.0.0/24."
+
+msgid "Select a country."
+msgstr "Выберите страну."
+
+msgid "Select a Russian region."
+msgstr "Выберите область России."
+
+msgid "The rule has been saved."
+msgstr "Правило сохранено."
+
+# --- RuleDeleteForm ---
+
+msgid "Delete the rule %rule?"
+msgstr "Удалить правило %rule?"
+
+msgid "Delete"
+msgstr "Удалить"
+
+msgid "The rule has been deleted."
+msgstr "Правило удалено."
+
+# --- RuleImportForm ---
+
+msgid "allowed"
+msgstr "разрешены"
+
+msgid "blocked"
+msgstr "заблокированы"
+
+msgid "Select regions and countries to add as rules. According to the current rule mode they will be %verb. Existing rules are skipped."
+msgstr "Выберите области и страны для добавления в правила. В соответствии с текущим режимом они будут %verb. Существующие правила не дублируются."
+
+msgid "Russian regions (@count)"
+msgstr "Области России (@count)"
+
+msgid "Regions"
+msgstr "Области"
+
+msgid "Countries"
+msgstr "Страны"
+
+msgid "Select all regions"
+msgstr "Выбрать все области"
+
+msgid "Add selected as rules"
+msgstr "Добавить выбранные как правила"
+
+msgid "Nothing selected."
+msgstr "Ничего не выбрано."
+
+msgid "Added @added rules, @skipped already existed."
+msgstr "Добавлено правил: @added, уже существовало: @skipped."
+
+# --- ExceptionForm ---
+
+msgid "Exception type"
+msgstr "Тип исключения"
+
+msgid "CIDR range"
+msgstr "CIDR-диапазон"
+
+msgid "User-Agent substring (bots, SEO services)"
+msgstr "Подстрока User-Agent (боты, SEO-сервисы)"
+
+msgid "Value"
+msgstr "Значение"
+
+msgid "IP, CIDR or a case-insensitive User-Agent substring, e.g. \"YandexBot\"."
+msgstr "IP, CIDR или нечувствительная к регистру подстрока User-Agent, например \"YandexBot\"."
+
+msgid "Verify by reverse DNS"
+msgstr "Проверять по обратному DNS"
+
+msgid "Only for User-Agent exceptions: the client IP must resolve through forward-confirmed reverse DNS to a known bot network (yandex.ru, googlebot.com, bing.com, ...). Recommended for Yandex/Google bots to prevent spoofing."
+msgstr "Только для исключений по User-Agent: IP клиента должен резолвиться через forward-confirmed reverse DNS к известной сети ботов (yandex.ru, googlebot.com, bing.com, ...). Рекомендуется для ботов Яндекса/Google для предотвращения подмены."
+
+msgid "Save exception"
+msgstr "Сохранить исключение"
+
+msgid "User-Agent substring is too short."
+msgstr "Подстрока User-Agent слишком короткая."
+
+msgid "The exception has been saved."
+msgstr "Исключение сохранено."
+
+# --- ExceptionDeleteForm ---
+
+msgid "Delete the exception %label?"
+msgstr "Удалить исключение %label?"
+
+msgid "The exception has been deleted."
+msgstr "Исключение удалено."
+
+# --- RulesListController ---
+
+msgid "These values are ALLOWED (whitelist mode)"
+msgstr "Эти значения РАЗРЕШЕНЫ (режим белого списка)"
+
+msgid "These values are BLOCKED (blacklist mode)"
+msgstr "Эти значения ЗАБЛОКИРОВАНЫ (режим чёрного списка)"
+
+msgid "GeoLite2-City database is not available — country and region rules will have no effect. Run <code>drush yu-ipas:download-db</code>."
+msgstr "База GeoLite2-City недоступна — правила по странам и областям не будут работать. Выполните <code>drush yu-ipas:download-db</code>."
+
+msgid "Russian regions"
+msgstr "Области России"
+
+msgid "Manual IP addresses"
+msgstr "Ручные IP-адреса"
+
+msgid "Manual CIDR ranges"
+msgstr "Ручные CIDR-диапазоны"
+
+msgid "Value"
+msgstr "Значение"
+
+msgid "Comment"
+msgstr "Комментарий"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Operations"
+msgstr "Операции"
+
+msgid "Edit"
+msgstr "Изменить"
+
+msgid "Disable"
+msgstr "Отключить"
+
+msgid "Enable"
+msgstr "Включить"
+
+msgid "No rules in this group. Use \"Add rule\" or \"Bulk import\"."
+msgstr "В этой группе нет правил. Используйте «Добавить правило» или «Массовый импорт»."
+
+msgid "Rule enabled."
+msgstr "Правило включено."
+
+msgid "Rule disabled."
+msgstr "Правило отключено."
+
+# --- ExceptionsController ---
+
+msgid "IP"
+msgstr "IP"
+
+msgid "User-Agent"
+msgstr "User-Agent"
+
+msgid "rDNS verify"
+msgstr "Проверка rDNS"
+
+msgid "Yes"
+msgstr "Да"
+
+msgid "No exceptions. Trusted bots (YandexBot, Googlebot) and SEO services can be added via \"Add exception\"."
+msgstr "Нет исключений. Доверенных ботов (YandexBot, Googlebot) и SEO-сервисы можно добавить через «Добавить исключение»."
+
+msgid "Recommended defaults: YandexBot (verify rDNS), Googlebot (verify rDNS), YandexDirect/Google AdWords verifiers, webmasters tools. SEO analytics bots (Ahrefs, Semrush, MJ12) can be exempted without rDNS verification or blocked together with everything else."
+msgstr "Рекомендуемые исключения: YandexBot (проверка rDNS), Googlebot (проверка rDNS), верификаторы YandexDirect/Google AdWords, инструменты вебмастеров. Боты SEO-аналитики (Ahrefs, Semrush, MJ12) можно исключить без проверки rDNS или блокировать вместе со всем остальным."
+
+# --- StatsController ---
+
+msgid "7 days"
+msgstr "7 дней"
+
+msgid "30 days"
+msgstr "30 дней"
+
+msgid "90 days"
+msgstr "90 дней"
+
+msgid "All time"
+msgstr "Всё время"
+
+msgid "Top countries (blocked)"
+msgstr "Топ стран (заблокировано)"
+
+msgid "Top Russian regions (blocked)"
+msgstr "Топ областей России (заблокировано)"
+
+msgid "GeoLite2-City database is not available — country/region fields in the log will be empty. Run <code>drush yu-ipas:download-db</code>."
+msgstr "База GeoLite2-City недоступна — поля страны/области в логе будут пустыми. Выполните <code>drush yu-ipas:download-db</code>."
+
+msgid "Total requests logged"
+msgstr "Всего записей в логе"
+
+msgid "Passed visits"
+msgstr "Разрешённые визиты"
+
+msgid "Blocked"
+msgstr "Заблокировано"
+
+msgid "Bot exceptions"
+msgstr "Исключения ботов"
+
+msgid "Block ratio"
+msgstr "Доля блокировок"
+
+msgid "No data for this period."
+msgstr "Нет данных за этот период."
+
+msgid "Geography"
+msgstr "География"
+
+msgid "Top blocked IPs"
+msgstr "Топ заблокированных IP"
+
+msgid "No blocked IPs for this period."
+msgstr "Нет заблокированных IP за этот период."
+
+msgid "Recent events"
+msgstr "Последние события"
+
+msgid "Time"
+msgstr "Время"
+
+msgid "Region"
+msgstr "Область"
+
+msgid "Action"
+msgstr "Действие"
+
+msgid "Bot"
+msgstr "Бот"
+
+msgid "Log is empty for this period."
+msgstr "Лог пуст за этот период."
+
+msgid "Passed"
+msgstr "Разрешено"
+
+msgid "Exception"
+msgstr "Исключение"
+
+# --- Drush (dt()) ---
+
+msgid "No MaxMind license key. Pass --key, set yu_ipas.settings:maxmind_key or the MAXMIND_LICENSE_KEY environment variable."
+msgstr "Нет лицензионного ключа MaxMind. Укажите --key, задайте yu_ipas.settings:maxmind_key или переменную окружения MAXMIND_LICENSE_KEY."
+
+msgid "mmdb_path is empty in yu_ipas.settings."
+msgstr "mmdb_path пуст в yu_ipas.settings."
+
+msgid "Cannot create directory @dir."
+msgstr "Не удалось создать каталог @dir."
+
+msgid "Downloading GeoLite2-City..."
+msgstr "Загрузка GeoLite2-City..."
+
+msgid "Download failed: @msg"
+msgstr "Ошибка загрузки: @msg"
+
+msgid "Download returned an empty file. Check the license key."
+msgstr "Загрузка вернула пустой файл. Проверьте лицензионный ключ."
+
+msgid "Extracting..."
+msgstr "Распаковка..."
+
+msgid "Extraction failed: @msg"
+msgstr "Ошибка распаковки: @msg"
+
+msgid "No .mmdb file found inside the archive."
+msgstr "В архиве не найден файл .mmdb."
+
+msgid "Cannot copy @src to @dest."
+msgstr "Не удалось скопировать @src в @dest."
+
+msgid "GeoLite2-City installed at @dest."
+msgstr "GeoLite2-City установлена: @dest."
+
+# --- Emergency access (SettingsForm, RescueForm) ---
+
+msgid "Emergency access"
+msgstr "Аварийный доступ"
+
+msgid "Protection against accidental self-lockout (for example, when whitelist mode blocks your own IP or region)."
+msgstr "Защита от случайной потери доступа (например, когда режим белого списка блокирует ваш собственный IP или область)."
+
+msgid "Never block administrators"
+msgstr "Никогда не блокировать администраторов"
+
+msgid "Logged-in user #1, users with the \"administrator\" role and holders of the \"Bypass IP Anti Spam blocking\" permission are never blocked by any rule. Recommended: keep enabled."
+msgstr "Пользователь №1 под логином, пользователи с ролью «administrator» и обладатели права «Обход блокировки IP Anti Spam» никогда не блокируются никакими правилами. Рекомендуется держать включённым."
+
+msgid "Emergency URL"
+msgstr "Аварийный URL"
+
+msgid "<a href=\":url\"><code>:url</code></a> works from ANY IP — even a blocked one. It disables blocking and adds the visitor IP to the trusted exceptions. Save this URL somewhere safe (password manager)."
+msgstr "<a href=\":url\"><code>:url</code></a> работает с ЛЮБОГО IP — даже заблокированного. Отключает блокировку и добавляет IP посетителя в доверенные исключения. Сохраните этот URL в надёжном месте (менеджер паролей)."
+
+msgid "Regenerate rescue token"
+msgstr "Перегенерировать токен спасения"
+
+msgid "Use if the emergency URL was compromised. The old URL will stop working."
+msgstr "Используйте, если аварийный URL попал в чужие руки. Старый URL перестанет работать."
+
+msgid "The rescue token has been changed. The new emergency URL is <a href=\":url\">:url</a> — save it somewhere safe."
+msgstr "Токен спасения изменён. Новый аварийный URL: <a href=\":url\">:url</a> — сохраните его в надёжном месте."
+
+msgid "Invalid or missing rescue token. Ask the site administrator for the emergency URL (Admin → IP Anti Spam → Settings → Emergency access)."
+msgstr "Неверный или отсутствующий токен спасения. Запросите у администратора аварийный URL (Админ → IP Anti Spam → Настройки → Аварийный доступ)."
+
+msgid "Blocking is currently ENABLED. Submitting the form below will restore your access."
+msgstr "Блокировка сейчас ВКЛЮЧЕНА. Отправка формы ниже вернёт вам доступ."
+
+msgid "Blocking is currently disabled. You can still add your current IP to the trusted exceptions."
+msgstr "Блокировка сейчас отключена. Вы всё равно можете добавить свой текущий IP в доверенные исключения."
+
+msgid "Restore my access"
+msgstr "Вернуть мне доступ"
+
+msgid "Emergency unblock (@date)"
+msgstr "Аварийная разблокировка (@date)"
+
+msgid "Access restored. Blocking is disabled and your IP %ip has been added to the trusted exceptions. Review your rules at @link before enabling blocking again."
+msgstr "Доступ восстановлен. Блокировка отключена, ваш IP %ip добавлен в доверенные исключения. Проверьте правила по ссылке @link перед повторным включением блокировки."
+
+# --- GeoIP database download sources (SettingsForm, GeoDbDownloader) ---
+
+msgid "Download source"
+msgstr "Источник загрузки"
+
+msgid "The official MaxMind download requires a free license key. Mirrors (P3TERX, jsDelivr, DB-IP Lite) serve the same GeoLite2/compatible City database in .mmdb format and need no registration — use them when the key is not available or download.maxmind.com is unreachable."
+msgstr "Официальная загрузка MaxMind требует бесплатного лицензионного ключа. Зеркала (P3TERX, jsDelivr, DB-IP Lite) отдают ту же базу City (GeoLite2 или совместимую) в формате .mmdb и не требуют регистрации — используйте их, если ключа нет или download.maxmind.com недоступен."
+
+msgid "Custom download URL"
+msgstr "Произвольный URL загрузки"
+
+msgid "Direct http(s) URL to a .mmdb or gzipped .mmdb.gz file (own mirror, self-hosted copy). Used only when the source is \"Custom URL\"."
+msgstr "Прямой http(s) URL файла .mmdb или .mmdb.gz (своё зеркало, копия на своём хостинге). Используется только если выбран источник «Произвольный URL»."
+
+msgid "Download database now"
+msgstr "Скачать базу сейчас"
+
+msgid "Downloads the City database from the selected source, validates it and installs it to the path above. Takes up to a few minutes — the Drush command <code>drush yu-ipas:download-db</code> is the preferred way on production."
+msgstr "Скачивает базу City из выбранного источника, проверяет её и устанавливает по указанному выше пути. Может занять несколько минут — на продакшене предпочтительнее команда <code>drush yu-ipas:download-db</code>."
+
+msgid "Invalid download source."
+msgstr "Недопустимый источник загрузки."
+
+msgid "Provide a direct http(s) URL to a .mmdb or .mmdb.gz file."
+msgstr "Укажите прямой http(s) URL файла .mmdb или .mmdb.gz."
+
+msgid "Geo database from @label installed at @path."
+msgstr "База @label установлена: @path."
+
+msgid "No MaxMind license key. Pass --key, set yu_ipas.settings:maxmind_key, the MAXMIND_LICENSE_KEY environment variable — or switch to a mirror source that does not require registration."
+msgstr "Отсутствует лицензионный ключ MaxMind. Передайте --key, задайте yu_ipas.settings:maxmind_key или переменную окружения MAXMIND_LICENSE_KEY — либо переключитесь на зеркало, не требующее регистрации."
+
+msgid "Unknown source \"@source\". Available: @list"
+msgstr "Неизвестный источник «@source». Доступны: @list"
+
+msgid "@label: GeoLite2-City installed at @dest."
+msgstr "@label: GeoLite2-City установлена: @dest."
+
+msgid "Downloaded from @url"
+msgstr "Скачано с @url"

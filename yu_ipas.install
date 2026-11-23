@@ -1,0 +1,278 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall hooks for the yu_ipas module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_schema().
+ */
+function yu_ipas_schema(): array {
+  $schema['yu_ipas_rules'] = [
+    'description' => 'Block/allow rules: manual IPs, CIDR ranges, countries and Russian regions.',
+    'fields' => [
+      'rid' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary key.',
+      ],
+      'type' => [
+        'type' => 'varchar',
+        'length' => 16,
+        'not null' => TRUE,
+        'description' => 'Rule type: ip, cidr, country or region.',
+      ],
+      'value' => [
+        'type' => 'varchar',
+        'length' => 64,
+        'not null' => TRUE,
+        'description' => 'IP address, CIDR range, ISO country code or ISO region code (e.g. RU-MOW).',
+      ],
+      'label' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Human readable label.',
+      ],
+      'enabled' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+        'description' => 'Whether the rule is active.',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Unix timestamp of creation.',
+      ],
+    ],
+    'primary key' => ['rid'],
+    'unique keys' => [
+      'type_value' => ['type', 'value'],
+    ],
+    'indexes' => [
+      'enabled' => ['enabled'],
+      'type' => ['type'],
+    ],
+  ];
+
+  $schema['yu_ipas_exceptions'] = [
+    'description' => 'Exceptions: trusted IPs, CIDR ranges and User-Agent patterns (bots, SEO services).',
+    'fields' => [
+      'eid' => [
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary key.',
+      ],
+      'type' => [
+        'type' => 'varchar',
+        'length' => 16,
+        'not null' => TRUE,
+        'description' => 'Exception type: ip, cidr or ua.',
+      ],
+      'value' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'description' => 'IP address, CIDR range or User-Agent substring (case-insensitive).',
+      ],
+      'label' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Human readable label.',
+      ],
+      'verify_rdns' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'For UA exceptions: confirm the bot by reverse DNS (protects against UA spoofing).',
+      ],
+      'enabled' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 1,
+        'description' => 'Whether the exception is active.',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Unix timestamp of creation.',
+      ],
+    ],
+    'primary key' => ['eid'],
+    'unique keys' => [
+      'type_value' => ['type', 'value'],
+    ],
+    'indexes' => [
+      'enabled' => ['enabled'],
+      'type' => ['type'],
+    ],
+  ];
+
+  $schema['yu_ipas_log'] = [
+    'description' => 'Visit/block statistics: one row per handled decision.',
+    'fields' => [
+      'lid' => [
+        'type' => 'serial',
+        'size' => 'big',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'description' => 'Primary key.',
+      ],
+      'created' => [
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Unix timestamp of the decision.',
+      ],
+      'ip' => [
+        'type' => 'varchar',
+        'length' => 45,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Client IP address (IPv4 or IPv6).',
+      ],
+      'country' => [
+        'type' => 'varchar',
+        'length' => 4,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'ISO country code from the GeoIP lookup, empty when unknown.',
+      ],
+      'region' => [
+        'type' => 'varchar',
+        'length' => 16,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'ISO region code (e.g. RU-MOW), empty when unknown.',
+      ],
+      'user_agent' => [
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+        'description' => 'Truncated User-Agent header.',
+      ],
+      'is_bot' => [
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'Whether the User-Agent looks like a bot.',
+      ],
+      'action' => [
+        'type' => 'varchar',
+        'length' => 16,
+        'not null' => TRUE,
+        'description' => 'Decision: blocked, passed or exception.',
+      ],
+      'rule_id' => [
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+        'description' => 'ID of the matched rule (rules table), 0 when none.',
+      ],
+    ],
+    'primary key' => ['lid'],
+    'indexes' => [
+      'created' => ['created'],
+      'action' => ['action', 'created'],
+      'ip' => ['ip'],
+      'country' => ['country'],
+      'region' => ['region'],
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Returns the default trusted bot exceptions shipped with the module.
+ *
+ * @return array<int, array{type: string, value: string, label: string, verify_rdns: int}>
+ */
+function yu_ipas_default_exceptions(): array {
+  return [
+    ['type' => 'ua', 'value' => 'YandexBot', 'label' => 'Yandex поисковый бот', 'verify_rdns' => 1],
+    ['type' => 'ua', 'value' => 'YandexMetrika', 'label' => 'Yandex Метрика', 'verify_rdns' => 0],
+    ['type' => 'ua', 'value' => 'Googlebot', 'label' => 'Google поисковый бот', 'verify_rdns' => 1],
+    ['type' => 'ua', 'value' => 'Google AdSense', 'label' => 'Google AdSense', 'verify_rdns' => 0],
+    ['type' => 'ua', 'value' => 'bingbot', 'label' => 'Bing поисковый бот', 'verify_rdns' => 1],
+    ['type' => 'ua', 'value' => 'AhrefsBot', 'label' => 'Ahrefs SEO-сервис', 'verify_rdns' => 0],
+    ['type' => 'ua', 'value' => 'SemrushBot', 'label' => 'Semrush SEO-сервис', 'verify_rdns' => 0],
+    ['type' => 'ua', 'value' => 'MJ12bot', 'label' => 'Majestic SEO-сервис', 'verify_rdns' => 0],
+    ['type' => 'ua', 'value' => 'Webmaster-Yandex', 'label' => 'Yandex Вебмастер', 'verify_rdns' => 0],
+    ['type' => 'ua', 'value' => 'Labrika', 'label' => 'Лабрика SEO-сервис', 'verify_rdns' => 0],
+  ];
+}
+
+/**
+ * Inserts the default bot exceptions, skipping existing rows.
+ */
+function yu_ipas_seed_default_exceptions(): void {
+  if (!\Drupal::database()->schema()->tableExists('yu_ipas_exceptions')) {
+    return;
+  }
+  foreach (yu_ipas_default_exceptions() as $e) {
+    $exists = \Drupal::database()->select('yu_ipas_exceptions', 'x')
+      ->condition('x.type', $e['type'])
+      ->condition('x.value', $e['value'])
+      ->countQuery()
+      ->execute()
+      ->fetchField();
+    if ((int) $exists === 0) {
+      \Drupal::database()->insert('yu_ipas_exceptions')
+        ->fields($e + ['enabled' => 1, 'created' => \time()])
+        ->execute();
+    }
+  }
+}
+
+/**
+ * Implements hook_install().
+ */
+function yu_ipas_install(bool $is_syncing = FALSE): void {
+  yu_ipas_seed_default_exceptions();
+}
+
+/**
+ * Adds the default trusted bot exceptions (also applied to fresh installs).
+ */
+function yu_ipas_update_11001(): void {
+  yu_ipas_seed_default_exceptions();
+}
+
+/**
+ * Adds the Labrika SEO-service exception to the preset list.
+ */
+function yu_ipas_update_11003(): void {
+  yu_ipas_seed_default_exceptions();
+}
+
+/**
+ * Seeds the emergency rescue token and enables the administrator safety net.
+ */
+function yu_ipas_update_11002(): void {
+  $config = \Drupal::configFactory()->getEditable('yu_ipas.settings');
+  if ((string) ($config->get('rescue_token') ?? '') === '') {
+    $config->set('rescue_token', bin2hex(random_bytes(21)));
+  }
+  if ($config->get('admins_safe') === NULL) {
+    $config->set('admins_safe', TRUE);
+  }
+  $config->save();
+}

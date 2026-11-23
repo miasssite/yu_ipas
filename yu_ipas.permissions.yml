@@ -1,0 +1,9 @@
+administer yu_ipas:
+  title: 'Administer IP Anti Spam'
+  description: 'Configure blocking rules, exceptions and view statistics.'
+  restrict access: true
+
+bypass yu_ipas:
+  title: 'Bypass IP Anti Spam blocking'
+  description: 'Never blocked by IP Anti Spam rules, regardless of IP.'
+  restrict access: true

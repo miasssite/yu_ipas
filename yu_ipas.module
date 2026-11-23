@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Hook implementations for the yu_ipas module.
+ */
+
+declare(strict_types=1);
+
+/**
+ * Implements hook_help().
+ */
+function yu_ipas_help(string $route_name): ?string {
+  if ($route_name !== 'help.page.yu_ipas') {
+    return NULL;
+  }
+  return '<p>' . t('IP Anti Spam blocks access to the site by IP address, country and Russian regions (GeoLite2-City database). Trusted bots (Yandex, Google) can be excluded via reverse DNS verification. All pages live under <a href=":url">IP Anti Spam</a>.', [
+    ':url' => '/admin/ipas',
+  ]) . '</p>';
+}
+
+/**
+ * Implements hook_cron().
+ *
+ * Purges visit/block log records older than the configured retention period.
+ */
+function yu_ipas_cron(): void {
+  $days = (int) (\Drupal::config('yu_ipas.settings')->get('log_retention_days') ?? 0);
+  if ($days > 0) {
+    \Drupal::service('yu_ipas.rule_storage')->purgeOldLogs($days);
+  }
+}

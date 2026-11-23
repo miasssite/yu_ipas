@@ -1,0 +1,9 @@
+name: 'IP Anti Spam'
+type: module
+description: 'Blocks access to the site by IP, country and Russian regions. Includes bot exceptions (Yandex, Google), rule management and visit/block statistics.'
+package: Custom
+core_version_requirement: ^11
+configure: yu_ipas.settings
+dependencies:
+  - drupal:system
+  - drupal:user

@@ -1,0 +1,93 @@
+/* IP Anti Spam admin styles. */
+
+.yu-ipas-summary-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 0;
+}
+
+.yu-ipas-card {
+  flex: 1 1 10rem;
+  min-width: 10rem;
+  padding: 1rem;
+  border: 1px solid var(--color-gray-200, #d3d9de);
+  border-radius: 8px;
+  background: var(--color-white, #fff);
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.yu-ipas-card__value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.yu-ipas-card__label {
+  color: var(--color-gray-700, #555);
+  font-size: 0.85rem;
+}
+
+.yu-ipas-card__sub {
+  color: var(--color-gray-500, #8a959d);
+  font-size: 0.75rem;
+}
+
+.yu-ipas-bar {
+  width: 100%;
+  min-width: 8rem;
+  height: 0.6rem;
+  background: var(--color-gray-100, #f2f4f5);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.yu-ipas-bar__fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-red-400, #e56666), var(--color-red-600, #c92c2c));
+  border-radius: 999px;
+}
+
+.yu-ipas-periods {
+  margin: 0.75rem 0;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.yu-ipas-periods .item-list ul {
+  display: flex;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.yu-ipas-period-link {
+  padding: 0.2rem 0.6rem;
+  border-radius: 6px;
+  text-decoration: none;
+}
+
+.yu-ipas-period-link.is-active {
+  background: var(--color-blue-600, #003ecc);
+  color: #fff;
+}
+
+.yu-ipas-ua {
+  color: var(--color-gray-600, #6b7480);
+  font-size: 0.8rem;
+}
+
+.yu-ipas-mode-note {
+  font-weight: 600;
+}
+
+.yu-ipas-rules-table,
+.yu-ipas-exceptions-table,
+.yu-ipas-top-table {
+  width: 100%;
+}

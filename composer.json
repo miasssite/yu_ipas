@@ -1,0 +1,10 @@
+{
+    "name": "yu/yu_ipas",
+    "description": "IP Anti Spam - blocks access by IP, country and Russian regions.",
+    "type": "drupal-custom-module",
+    "license": "GPL-2.0-or-later",
+    "require": {
+        "drupal/core": "^11",
+        "maxmind-db/reader": "^1.12"
+    }
+}

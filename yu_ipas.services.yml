@@ -1,0 +1,52 @@
+services:
+  # Autowire alias: Drush commands use Drush\Commands\AutowireTrait, which
+  # resolves constructor parameters by their class name.
+  Drupal\yu_ipas\GeoIp\GeoDbDownloader: '@yu_ipas.db_downloader'
+
+  yu_ipas.geo_lookup:
+    class: Drupal\yu_ipas\GeoIp\GeoLookupService
+    arguments:
+      - '@config.factory'
+      - '@cache.default'
+      - '@file_system'
+      - '@logger.factory'
+
+  # Downloads the GeoIP City database from MaxMind or one of the mirrors.
+  yu_ipas.db_downloader:
+    class: Drupal\yu_ipas\GeoIp\GeoDbDownloader
+    arguments:
+      - '@config.factory'
+      - '@http_client'
+      - '@file_system'
+      - '@logger.factory'
+      - '@cache.default'
+      - '@stream_wrapper_manager'
+
+  yu_ipas.rule_storage:
+    class: Drupal\yu_ipas\Rules\RuleStorage
+    arguments:
+      - '@database'
+
+  yu_ipas.rule_engine:
+    class: Drupal\yu_ipas\Rules\RuleEngine
+    arguments:
+      - '@yu_ipas.geo_lookup'
+      - '@yu_ipas.rule_storage'
+      - '@config.factory'
+      - '@cache.default'
+
+  # Runs before http_middleware.page_cache (priority 200) so that blocked
+  # visitors can never be served an anonymous cached page.
+  yu_ipas.middleware:
+    class: Drupal\yu_ipas\Http\YuIpasMiddleware
+    arguments:
+      - '@yu_ipas.rule_engine'
+      - '@yu_ipas.rule_storage'
+      - '@config.factory'
+      - '@session'
+      - '@session_configuration'
+      - '@request_stack'
+      - '@entity_type.manager'
+      - '@cache.default'
+    tags:
+      - { name: http_middleware, priority: 300 }

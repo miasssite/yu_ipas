@@ -1,0 +1,40 @@
+# Local tabs shared across all /admin/ipas pages.
+yu_ipas.stats_tab:
+  title: 'Statistics'
+  route_name: yu_ipas.stats
+  base_route: yu_ipas.stats
+
+yu_ipas.rules_tab:
+  title: 'Rules'
+  route_name: yu_ipas.rules
+  base_route: yu_ipas.stats
+
+yu_ipas.exceptions_tab:
+  title: 'Exceptions'
+  route_name: yu_ipas.exceptions
+  base_route: yu_ipas.stats
+
+yu_ipas.settings_tab:
+  title: 'Settings'
+  route_name: yu_ipas.settings
+  base_route: yu_ipas.stats
+
+# Sub-tabs inside "Rules".
+yu_ipas.rule_add_tab:
+  title: 'Add rule'
+  route_name: yu_ipas.rule_add
+  base_route: yu_ipas.rules
+  parent_id: yu_ipas.rules_tab
+
+yu_ipas.rule_import_tab:
+  title: 'Bulk import'
+  route_name: yu_ipas.rule_import
+  base_route: yu_ipas.rules
+  parent_id: yu_ipas.rules_tab
+
+# Sub-tabs inside "Exceptions".
+yu_ipas.exception_add_tab:
+  title: 'Add exception'
+  route_name: yu_ipas.exception_add
+  base_route: yu_ipas.exceptions
+  parent_id: yu_ipas.exceptions_tab

@@ -1,0 +1,48 @@
+yu_ipas.settings:
+  type: config_object
+  label: 'IP Anti Spam settings'
+  mapping:
+    enabled:
+      type: boolean
+      label: 'Blocking enabled'
+    mode:
+      type: string
+      label: 'Rule mode'
+      constraints:
+        Choice:
+          - blacklist
+          - whitelist
+    mmdb_path:
+      type: string
+      label: 'Path to the GeoLite2-City.mmdb database'
+    db_source:
+      type: string
+      label: 'Geo database download source'
+      constraints:
+        Choice:
+          - maxmind
+          - p3terx
+          - jsdelivr
+          - dbip
+          - custom
+    custom_db_url:
+      type: string
+      label: 'Custom direct .mmdb/.mmdb.gz download URL'
+    maxmind_key:
+      type: string
+      label: 'MaxMind license key'
+    log_passed:
+      type: boolean
+      label: 'Log passed visits'
+    log_retention_days:
+      type: integer
+      label: 'Log retention period (days)'
+    bot_rdns_verify:
+      type: boolean
+      label: 'Verify bots by reverse DNS'
+    admins_safe:
+      type: boolean
+      label: 'Never block administrators'
+    rescue_token:
+      type: string
+      label: 'Emergency rescue token'
