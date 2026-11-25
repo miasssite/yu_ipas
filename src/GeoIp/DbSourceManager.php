@@ -79,8 +79,8 @@ final class DbSourceManager {
   public static function options(): array {
     $options = [];
     foreach (self::all() as $id => $source) {
-      $suffix = $source['needs_key'] ? ' (license key required)' : ' (no registration)';
-      $options[$id] = $source['label'] . $suffix;
+      $suffix = (string) t($source['needs_key'] ? ' (license key required)' : ' (no registration)');
+      $options[$id] = (string) t($source['label']) . $suffix;
     }
     return $options;
   }
@@ -106,7 +106,7 @@ final class DbSourceManager {
   public static function buildUrl(string $sourceId, string $customUrl = '', string $licenseKey = '', ?int $timestamp = NULL): array {
     $sources = self::all();
     if (!isset($sources[$sourceId])) {
-      throw new \InvalidArgumentException(sprintf('Unknown geo database source "%s".', $sourceId));
+      throw new \InvalidArgumentException((string) t('Unknown geo database source "@source".', ['@source' => $sourceId]));
     }
     $source = $sources[$sourceId];
     $timestamp ??= \time();
@@ -116,7 +116,7 @@ final class DbSourceManager {
         return [
           'url' => $source['url'] . '?license_key=' . rawurlencode($licenseKey),
           'needs_key' => TRUE,
-          'label' => $source['label'],
+          'label' => (string) t($source['label']),
         ];
 
       case self::P3TERX:
@@ -124,7 +124,7 @@ final class DbSourceManager {
         return [
           'url' => $source['url'],
           'needs_key' => FALSE,
-          'label' => $source['label'],
+          'label' => (string) t($source['label']),
         ];
 
       case self::DBIP:
@@ -138,26 +138,26 @@ final class DbSourceManager {
             '{Y}-{M_PREV}' => $previous,
           ]),
           'needs_key' => FALSE,
-          'label' => $source['label'],
+          'label' => (string) t($source['label']),
           'fallback_url' => strtr($source['url'], ['{Y}-{M}' => $previous]),
         ];
 
       case self::CUSTOM:
         $url = trim($customUrl);
         if ($url === '') {
-          throw new \InvalidArgumentException('The "custom" source requires a direct .mmdb or .mmdb.gz URL in the settings.');
+          throw new \InvalidArgumentException((string) t('The "custom" source requires a direct .mmdb or .mmdb.gz URL in the settings.'));
         }
         if (!filter_var($url, FILTER_VALIDATE_URL) || !preg_match('#^https?://#i', $url)) {
-          throw new \InvalidArgumentException(sprintf('"%s" is not a valid http(s) URL for the custom geo database source.', $url));
+          throw new \InvalidArgumentException((string) t('"@url" is not a valid http(s) URL for the custom geo database source.', ['@url' => $url]));
         }
         return [
           'url' => $url,
           'needs_key' => FALSE,
-          'label' => $source['label'],
+          'label' => (string) t($source['label']),
         ];
     }
 
-    throw new \InvalidArgumentException(sprintf('Unknown geo database source "%s".', $sourceId));
+    throw new \InvalidArgumentException((string) t('Unknown geo database source "@source".', ['@source' => $sourceId]));
   }
 
 }

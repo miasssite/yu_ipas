@@ -7,7 +7,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"PO-Revision-Date: 2026-11-20 12:00+0500\n"
+"PO-Revision-Date: 2026-11-25 20:20+0500\n"
 "Last-Translator: \n"
 "Language-Team: Russian\n"
 "Language: ru\n"
@@ -320,12 +320,6 @@ msgstr "Ручные IP-адреса"
 msgid "Manual CIDR ranges"
 msgstr "Ручные CIDR-диапазоны"
 
-msgid "Value"
-msgstr "Значение"
-
-msgid "Comment"
-msgstr "Комментарий"
-
 msgid "Status"
 msgstr "Статус"
 
@@ -566,3 +560,98 @@ msgstr "@label: GeoLite2-City установлена: @dest."
 
 msgid "Downloaded from @url"
 msgstr "Скачано с @url"
+
+# --- Controllers: common table cells (RulesListController, ExceptionsController, StatsController) ---
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "CIDR"
+msgstr "CIDR"
+
+msgid "Disabled"
+msgstr "Отключено"
+
+msgid "—"
+msgstr "—"
+
+msgid "@count IPs"
+msgstr "IP-адресов: @count"
+
+# --- Drush (dt()) ---
+
+msgid "yu_ipas blocking has been DISABLED."
+msgstr "Блокировка yu_ipas ОТКЛЮЧЕНА."
+
+msgid "yu_ipas blocking has been ENABLED."
+msgstr "Блокировка yu_ipas ВКЛЮЧЕНА."
+
+# --- GeoIP database download sources (DbSourceManager) ---
+
+msgid "MaxMind (official)"
+msgstr "MaxMind (официальный)"
+
+msgid "P3TERX mirror (GitHub)"
+msgstr "Зеркало P3TERX (GitHub)"
+
+msgid "jsDelivr CDN mirror"
+msgstr "Зеркало CDN jsDelivr"
+
+msgid "DB-IP Lite"
+msgstr "DB-IP Lite"
+
+msgid "Custom URL"
+msgstr "Произвольный URL"
+
+msgid " (license key required)"
+msgstr " (нужен лицензионный ключ)"
+
+msgid " (no registration)"
+msgstr " (без регистрации)"
+
+msgid "Unknown geo database source \"@source\"."
+msgstr "Неизвестный источник Geo-базы «@source»."
+
+msgid "The \"custom\" source requires a direct .mmdb or .mmdb.gz URL in the settings."
+msgstr "Для источника «Произвольный URL» укажите в настройках прямой URL файла .mmdb или .mmdb.gz."
+
+msgid "\"@url\" is not a valid http(s) URL for the custom geo database source."
+msgstr "«@url» — не корректный http(s) URL для источника «Произвольный URL»."
+
+# --- GeoDbDownloader (errors shown in the settings form and Drush) ---
+
+msgid "Cannot create temporary directory @dir."
+msgstr "Не удалось создать временный каталог @dir."
+
+msgid "Download failed."
+msgstr "Ошибка загрузки."
+
+msgid "Download failed from @url: @msg"
+msgstr "Ошибка загрузки с @url: @msg"
+
+msgid "Download from @url returned an empty file."
+msgstr "Загрузка с @url вернула пустой файл."
+
+msgid "Cannot open downloaded file @file."
+msgstr "Не удалось открыть загруженный файл @file."
+
+msgid "Downloaded file is neither gzip-compressed nor a valid .mmdb file."
+msgstr "Загруженный файл не является ни gzip-архивом, ни корректным файлом .mmdb."
+
+msgid "Cannot gunzip the downloaded file."
+msgstr "Не удалось распаковать загруженный файл (gunzip)."
+
+msgid "Cannot write @file."
+msgstr "Не удалось записать @file."
+
+msgid "Tar extraction failed: @msg"
+msgstr "Ошибка распаковки tar: @msg"
+
+msgid "No .mmdb file found inside the downloaded archive."
+msgstr "В загруженном архиве не найден файл .mmdb."
+
+msgid "The file downloaded from @url is not a valid MaxMind mmdb database: @msg"
+msgstr "Файл, загруженный с @url, не является корректной базой MaxMind mmdb: @msg"
+
+msgid "Geo database installed from @source: @url"
+msgstr "Geo-база установлена из @source: @url"

@@ -9,6 +9,7 @@ use Drupal\Core\Config\ConfigFactoryInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\StreamWrapper\StreamWrapperManagerInterface;
+use Drupal\Core\StringTranslation\StringTranslationTrait;
 use GuzzleHttp\ClientInterface;
 use MaxMind\Db\Reader;
 
@@ -22,6 +23,8 @@ use MaxMind\Db\Reader;
  * database file.
  */
 final class GeoDbDownloader {
+
+  use StringTranslationTrait;
 
   /**
    * Download timeout in seconds (the databases are 40-70 MB).
@@ -88,24 +91,24 @@ final class GeoDbDownloader {
     }
 
     if ($info['needs_key'] && $licenseKey === '') {
-      throw new \RuntimeException('No MaxMind license key. Pass --key, set yu_ipas.settings:maxmind_key, the MAXMIND_LICENSE_KEY environment variable — or switch to a mirror source that does not require registration.');
+      throw new \RuntimeException((string) $this->t('No MaxMind license key. Pass --key, set yu_ipas.settings:maxmind_key, the MAXMIND_LICENSE_KEY environment variable — or switch to a mirror source that does not require registration.'));
     }
 
     // Resolve the destination directory from the configured stream wrapper path.
     $destPath = (string) ($settings->get('mmdb_path') ?? '');
     if ($destPath === '') {
-      throw new \RuntimeException('mmdb_path is empty in yu_ipas.settings.');
+      throw new \RuntimeException((string) $this->t('mmdb_path is empty in yu_ipas.settings.'));
     }
     $this->ensureStreamWrappers();
     $realpath = $this->fileSystem->realpath($destPath);
     $finalDir = $realpath !== FALSE ? dirname($realpath) : dirname($destPath);
     if (!is_dir($finalDir) && !@mkdir($finalDir, 0775, TRUE)) {
-      throw new \RuntimeException(sprintf('Cannot create directory %s.', $finalDir));
+      throw new \RuntimeException((string) $this->t('Cannot create directory @dir.', ['@dir' => $finalDir]));
     }
 
     $tmpDir = sys_get_temp_dir() . '/yu_ipas_' . uniqid();
     if (!mkdir($tmpDir, 0775, TRUE)) {
-      throw new \RuntimeException(sprintf('Cannot create temporary directory %s.', $tmpDir));
+      throw new \RuntimeException((string) $this->t('Cannot create temporary directory @dir.', ['@dir' => $tmpDir]));
     }
 
     try {
@@ -130,7 +133,7 @@ final class GeoDbDownloader {
         }
       }
       if ($raw === NULL) {
-        throw new \RuntimeException($lastError !== '' ? $lastError : 'Download failed.');
+        throw new \RuntimeException($lastError !== '' ? $lastError : (string) $this->t('Download failed.'));
       }
 
       $mmdb = $this->extractMmdb($raw, $tmpDir);
@@ -138,13 +141,13 @@ final class GeoDbDownloader {
 
       $dest = $finalDir . '/GeoLite2-City.mmdb';
       if (!@copy($mmdb, $dest)) {
-        throw new \RuntimeException(sprintf('Cannot copy %s to %s.', $mmdb, $dest));
+        throw new \RuntimeException((string) $this->t('Cannot copy @src to @dest.', ['@src' => $mmdb, '@dest' => $dest]));
       }
 
       // Reset cached geo lookups so the fresh database is used immediately.
       $this->cache->deleteAll();
 
-      $this->loggerFactory->get('yu_ipas')->notice('Geo database installed from @source: @url', [
+      $this->loggerFactory->get('yu_ipas')->notice((string) $this->t('Geo database installed from @source: @url'), [
         '@source' => $sourceId,
         '@url' => $usedUrl,
       ]);
@@ -178,11 +181,11 @@ final class GeoDbDownloader {
       ]);
     }
     catch (\Throwable $e) {
-      throw new \RuntimeException(sprintf('Download failed from %s: %s', $url, $e->getMessage()));
+      throw new \RuntimeException((string) $this->t('Download failed from @url: @msg', ['@url' => $url, '@msg' => $e->getMessage()]));
     }
 
     if (!is_file($sink) || filesize($sink) === 0) {
-      throw new \RuntimeException(sprintf('Download from %s returned an empty file.', $url));
+      throw new \RuntimeException((string) $this->t('Download from @url returned an empty file.', ['@url' => $url]));
     }
     return $sink;
   }
@@ -199,7 +202,7 @@ final class GeoDbDownloader {
   private function extractMmdb(string $file, string $tmpDir): string {
     $handle = fopen($file, 'rb');
     if ($handle === FALSE) {
-      throw new \RuntimeException(sprintf('Cannot open downloaded file %s.', $file));
+      throw new \RuntimeException((string) $this->t('Cannot open downloaded file @file.', ['@file' => $file]));
     }
     $magic = (string) fread($handle, 2);
     fclose($handle);
@@ -209,27 +212,27 @@ final class GeoDbDownloader {
       if ($this->looksLikeMmdb($file)) {
         return $file;
       }
-      throw new \RuntimeException('Downloaded file is neither gzip-compressed nor a valid .mmdb file.');
+      throw new \RuntimeException((string) $this->t('Downloaded file is neither gzip-compressed nor a valid .mmdb file.'));
     }
 
     // Stream-decompress instead of gzdecode() so that a 150 MB database never
     // has to fit into memory at once.
     $in = @gzopen($file, 'rb');
     if ($in === FALSE) {
-      throw new \RuntimeException('Cannot gunzip the downloaded file.');
+      throw new \RuntimeException((string) $this->t('Cannot gunzip the downloaded file.'));
     }
 
     $decodedFile = $tmpDir . '/decoded.bin';
     $out = fopen($decodedFile, 'wb');
     if ($out === FALSE) {
-      throw new \RuntimeException(sprintf('Cannot write %s.', $decodedFile));
+      throw new \RuntimeException((string) $this->t('Cannot write @file.', ['@file' => $decodedFile]));
     }
     while (!gzeof($in)) {
       $chunk = gzread($in, 262144);
       if ($chunk === FALSE || fwrite($out, $chunk) === FALSE) {
         fclose($out);
         gzclose($in);
-        throw new \RuntimeException('Cannot gunzip the downloaded file.');
+        throw new \RuntimeException((string) $this->t('Cannot gunzip the downloaded file.'));
       }
     }
     fclose($out);
@@ -249,11 +252,11 @@ final class GeoDbDownloader {
         $tar->extractTo($tmpDir, NULL, TRUE);
       }
       catch (\Throwable $e) {
-        throw new \RuntimeException(sprintf('Tar extraction failed: %s', $e->getMessage()));
+        throw new \RuntimeException((string) $this->t('Tar extraction failed: @msg', ['@msg' => $e->getMessage()]));
       }
       $mmdb = $this->findMmdb($tmpDir);
       if ($mmdb === NULL) {
-        throw new \RuntimeException('No .mmdb file found inside the downloaded archive.');
+        throw new \RuntimeException((string) $this->t('No .mmdb file found inside the downloaded archive.'));
       }
       return $mmdb;
     }
@@ -278,7 +281,7 @@ final class GeoDbDownloader {
       $reader->get('8.8.8.8');
     }
     catch (\Throwable $e) {
-      throw new \RuntimeException(sprintf('The file downloaded from %s is not a valid MaxMind mmdb database: %s', $url, $e->getMessage()));
+      throw new \RuntimeException((string) $this->t('The file downloaded from @url is not a valid MaxMind mmdb database: @msg', ['@url' => $url, '@msg' => $e->getMessage()]));
     }
   }
 

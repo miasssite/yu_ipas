@@ -128,8 +128,8 @@ final class StatsController extends ControllerBase {
 
     $cards = [
       ['label' => $this->t('Total requests logged'), 'value' => $total],
-      ['label' => $this->t('Passed visits'), 'value' => $passed, 'sub' => $passedIps . ' IPs'],
-      ['label' => $this->t('Blocked'), 'value' => $blocked, 'sub' => $blockedIps . ' IPs'],
+      ['label' => $this->t('Passed visits'), 'value' => $passed, 'sub' => (string) $this->t('@count IPs', ['@count' => $passedIps])],
+      ['label' => $this->t('Blocked'), 'value' => $blocked, 'sub' => (string) $this->t('@count IPs', ['@count' => $blockedIps])],
       ['label' => $this->t('Bot exceptions'), 'value' => $exceptions],
       ['label' => $this->t('Block ratio'), 'value' => $ratio . '%'],
     ];
